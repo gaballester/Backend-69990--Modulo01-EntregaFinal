@@ -7,12 +7,26 @@ const prodManager = new ProductManager()
 
 productsRouter.get('/', async (req,res) => {
     try {
-        const page  = req.query.page || 1
-        const limit = req.query.limit || 10
-        const query = req.query.query || null
+        const page  = parseInt(req.query.page,10) || 1
+        const limit  = parseInt(req.query.limit,10) || 10
         const sort  = req.query.sort || null
+        const category = req.query.category || 'All'
 
-        const productsResult = await prodManager.getProducts(page,limit,query,sort)
+        let query = '{}'
+        if ( category !== 'All' ) {
+            query = `{ category: '${category}'}`
+        }
+
+        let options = `{page: ${page}, limit: ${limit}`
+  
+        if (sort != null) {
+            options = options + `,${sort}`
+        } else {
+            options = options + '}'
+        }
+
+        //const productsResult = await prodManager.getProducts(query,options) */
+        const productsResult = await prodManager.getProducts(query,options)
 
         const arrayProducts = productsResult.docs.map( prod => {
             const {_id,...rest} = prod.toObject()
@@ -47,9 +61,7 @@ productsRouter.get('/', async (req,res) => {
 
 productsRouter.get('/:id', async (req,res) => {
     try {
-        console.log(id)
         const id = req.params.id
-        console.log('id',id)
         const product = await prodManager.getProductById(id)
         res.json(product)
     } catch (error) {

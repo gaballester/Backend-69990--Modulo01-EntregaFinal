@@ -1,3 +1,4 @@
+import { query } from 'express'
 import ProductModel from '../../models/product.model.js'
 
 class ProductManager {
@@ -25,16 +26,31 @@ class ProductManager {
         } catch (error) {
               throw `Internal Server Error when trying to add product: ${error}`
         }
-    } 
+    }  
 
-    //sort({firstName: 1, lastName:-1 ,email:1,createdAt:1, updatedAt:1 })
 
-    getProducts = async(page=1,limit=10)  => {
+    getProducts = async(query, options)  => {
         try {
+                       console.log('query',query)
+            console.log('options',options)
+            let parameters = JSON.parse(JSON.stringify(query +','+options))
+            console.log(parameters)
+/*             const options = {
+                page: 1,
+                limit: 10,
+                sort: { price: -1}
+              }
+              const query = {
+                category: 'C'
+              } */
             //const productsArray = await ProductModel.find() 
-            const productsArray = await ProductModel.paginate({},{page,limit})
+            const productsArray = await ProductModel.paginate(parameters)
+                // {category: 'C' }, { page: 1, limit: 5, sort: { price: 1}})
+
+            //{ category: 'C' }, { page: 1, limit: 5, sort: { price: 1}}
             return productsArray
-        } catch (error) {
+        }
+         catch (error) {
             throw `Error while fetching products: ${error}`
         }
      }
@@ -42,7 +58,6 @@ class ProductManager {
     getProductById = async (id) => {
         try {
             const productFind = await ProductModel.findById(id)
-            console.log(productFind)
             if (productFind){
                 return productFind
             } else {

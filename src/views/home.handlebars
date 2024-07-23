@@ -4,10 +4,11 @@
                 <h3>List all Products</h3>
                 
                 <div class="col-1">
-                    <label for="pageNbr" class="col-form-label">Rows/Page</label>
+                    <label for="limit" class="col-form-label">Rows/Page</label>
                 </div>
                 <div class="col-1">
-                    <select id="pageNbr" class="form-select form-select-sm" aria-label="">
+                    <select id="limit" class="form-select form-select-sm" aria-label="">
+                    <option value="5" >5</option>
                     <option value="10" selected>10</option>
                     <option value="20">20</option>
                     <option value="30">30</option>
@@ -36,8 +37,9 @@
                     </select>
                 </div>   
                 <div class="col-3">
-                    <button type="button" id="btn-select" class="btn btn-outline-primary btn-sm">Apply Selection</button>
-                    <button type="button" id="btn-unselect"class="btn btn-outline-danger btn-sm">Clear Selection</button>
+                    <input type="submit" onClick="myFunction()"/> 
+                {{!--     <a href="/api/products?page={{session.home.page}}&limit={{session.home.limit}}&sort={{sort}}">Recargar</a> --}}
+{{!--                     <a href="{{href}}" class="btn btn-select" role="button">Link Button</a> --}}
                 </div>                   
 
                 <table class="table table-dark">
@@ -67,47 +69,68 @@
                         {{/each}}
                     </tbody>
                 </table>
-                            {{#if hasPrevPage}}
-                <a href="/api/products?page={{prevPage}}">Anterior</a>
-            {{/if}}
-            {{#if hasNextPage}}
-                <a href="/api/products?page={{nextPage}}">Siguiente</a>
-            {{/if}}       
-            <p> {{currentPage}} de {{totalPages}}</p>   
+
+                {{#if hasPrevPage}}
+                <a href="/api/products?page={{prevPage}},limit={{limit}}">Anterior</a>
+                {{/if}}
+
+                <span>Page {{currentPage}} of {{totalPages}}</span>
+
+                {{#if hasNextPage}}
+                <a href="/api/products?page={{nextPage}},limit={{limit}}">Siguiente</a>
+                {{/if}}
+
+
 <script>
 
-    let pages = 10
-    let category = null
-    let orderBy = null
-    let filter = null
+    let limit = 10
+    let category = 'All'
+    let orderBy = 1
+    let page = 1
+    let sort = null
+    let ref = ''
 
-        document.getElementById('btn-select').addEventListener('click',() => {
-            if ( category ne 'All') {
-                filter = `{{category = {'${category}''}}}` 
-            }
-            
-        })
+    const pagesObj = document.getElementById('limit')
+    pagesObj.addEventListener('change', function () {
+        limit = document.getElementById("limit").value
+        ref = `/api/products?page=${page}&limit=${limit}&sort=${sort}&category=${category}`
+        console.log('limit1',ref)
+    });
 
-        document.getElementById('btn-unselect').addEventListener('click',() => {
-            
-        })
+    const categoryObj = document.getElementById('category')
+    categoryObj.addEventListener('change', function () {
+        category = document.getElementById("category").value
+                ref = `/api/products?page=${page}&limit=${limit}&sort=${sort}&category=${category}`
+        console.log('category1',ref)
+    });
 
-        const pagesObj = document.getElementById('pageNbr')
-        pagesObj.addEventListener('change', function () {
-            pages = document.getElementById("pageNbr").value
-        });
+    const orderByObj = document.getElementById('orderBy')
+    orderByObj.addEventListener('change', function () {
+        console.log('entroooo')
+        orderBy = document.getElementById("orderBy").value
+        console.log('orderBy',orderBy)
+        switch (orderBy) {
+            case '1':
+             sort = ''
+              break
+            case '2':
+              sort = 'sort: {price: -1}}'
+              break
+            case '3':
+               sort = 'sort: {price: 1}}'
+               break
+        }
+                ref = `/api/products?page=${page}&limit=${limit}&sort=${sort}&category=${category}`
+        console.log('sort',ref)
+    });
 
-        const categoryObj = document.getElementById('category')
-        categoryObj.addEventListener('change', function () {
-            category = document.getElementById("category").value
-        });
+      function myFunction() {
+        window.location.href=`${ref}` 
+      }
 
-        const categoryObj = document.getElementById('orderBy')
-        orderByObj.addEventListener('change', function () {
-            orderBy = document.getElementById("orderBy").value
-        });
+  </script>
 
-</script>
+
 
 
 
