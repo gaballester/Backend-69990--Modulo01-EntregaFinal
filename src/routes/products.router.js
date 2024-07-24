@@ -9,21 +9,29 @@ productsRouter.get('/', async (req,res) => {
     try {
         const page  = parseInt(req.query.page,10) || 1
         const limit  = parseInt(req.query.limit,10) || 10
-        const sort  = req.query.sort || null
+        const order  = req.query.sort 
         const category = req.query.category || 'All'
 
-        let query = '{}'
-        if ( category !== 'All' ) {
-            query = `{ category: '${category}'}`
-        }
+        let query = {}
+        let sort = {}
 
-        let options = `{page: ${page}, limit: ${limit}`
-  
-        if (sort != null) {
-            options = options + `,${sort}`
-        } else {
-            options = options + '}'
+        if ( category !== 'All' ) {
+            query.category = category
         }
+        
+        switch (order) {
+            case '':
+                sort = {}
+                break
+            case 'desc':
+                sort = { price: -1 }
+                break
+            case 'asc':
+                sort = { price: 1} 
+                break
+        }
+  
+        const options = {page, limit, sort}
 
         //const productsResult = await prodManager.getProducts(query,options) */
         const productsResult = await prodManager.getProducts(query,options)

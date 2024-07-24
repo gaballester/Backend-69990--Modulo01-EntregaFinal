@@ -31,23 +31,7 @@ class ProductManager {
 
     getProducts = async(query, options)  => {
         try {
-                       console.log('query',query)
-            console.log('options',options)
-            let parameters = JSON.parse(JSON.stringify(query +','+options))
-            console.log(parameters)
-/*             const options = {
-                page: 1,
-                limit: 10,
-                sort: { price: -1}
-              }
-              const query = {
-                category: 'C'
-              } */
-            //const productsArray = await ProductModel.find() 
-            const productsArray = await ProductModel.paginate(parameters)
-                // {category: 'C' }, { page: 1, limit: 5, sort: { price: 1}})
-
-            //{ category: 'C' }, { page: 1, limit: 5, sort: { price: 1}}
+            const productsArray = await ProductModel.paginate(query, options)
             return productsArray
         }
          catch (error) {
