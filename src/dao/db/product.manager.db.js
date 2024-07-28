@@ -42,6 +42,7 @@ class ProductManager {
     getProductById = async (id) => {
         try {
             const productFind = await ProductModel.findById(id)
+            console.log(productFind)
             if (productFind){
                 return productFind
             } else {

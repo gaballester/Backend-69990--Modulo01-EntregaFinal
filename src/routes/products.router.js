@@ -54,14 +54,6 @@ productsRouter.get('/', async (req,res) => {
             totalPages: productsResult.totalPages
         }
         )
-        
-
-/*         if (limit){
-            const limitedProducts = products.slice(0,limit)
-            res.json(limitedProducts)
-        } else {
-            res.json(products)
-        } */
     } catch (error) {
         res.status(500).json({ status: 'ERROR' })
     }
@@ -69,8 +61,7 @@ productsRouter.get('/', async (req,res) => {
 
 productsRouter.get('/:id', async (req,res) => {
     try {
-        const id = req.params.id
-        const product = await prodManager.getProductById(id)
+        const product = await prodManager.getProductById(req.params.id)
         res.json(product)
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error - reading one product" })

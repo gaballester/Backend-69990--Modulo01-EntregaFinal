@@ -2,20 +2,13 @@ const socket = io()
 
 socket.on("products", (data) => {
     try {
-        console.log(data)
         productsRender(data)
     } catch (error) {
         console.error("Error ocurred in productsRender:", error)
     }
 })
 
-/* socket.on("products", (data) => {
-    try {
-        productsRender(data)
-    } catch (error) {
-        console.error("Error ocurred in productsRender:", error)
-    }
-}) */
+
 
 const productsRender = (products) => {
     try {
