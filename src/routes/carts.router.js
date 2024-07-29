@@ -8,13 +8,14 @@ const cartManager = new CartManager()
 // Create New Cart
 cartsRouter.post('/', async (req,res) => {
     try {
+        console.log('entro pro crear nueva cartera')
         const newCart = await cartManager.addNewCart()
         res.json(newCart)
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error -adding new cart"})
     }
 })
-
+    
 // Get cart by Id
 cartsRouter.get('/:id', async (req,res) => {
     const { id } = req.params
@@ -22,21 +23,24 @@ cartsRouter.get('/:id', async (req,res) => {
         const cartProducts = await cartManager.getCartById(id)
         res.json(cartProducts)      
     } catch (error) {
-        res.status(500).json({ error: "Internal Server Error - error to access to products cart"})
+        res.status(500).json({ error: `Internal Server Error - error to access to products cart. ${error.message} `})
     }
 } )
 
-// add quantity product to cartId
+// add quantityn & product to cartId
 cartsRouter.post('/:cid/product/:pid', async (req,res)  => {
-    const { cid, pid } = req.params
     try {
-        const quantity = req.body.quantity || 1;
+        const cid = req.params.cid
+        const pid = req.params.pid
+        const quantity = req.body.quantity || 1
         const cart = await cartManager.addProductToCart(cid,pid,quantity)
-        res.status(201).json({message: "Product added successfully"});
+        res.status(201).json({message: `Product added successfully.  ${error.message}`});
     } catch (error) {
-        res.status(500).json({ error: "Internal Server Error - adding product to Cart"})
+        res.status(500).json({ error: `Internal Server Error - adding product to Cart.  ${error.message}`})
     }
 })
+
+
 
 /* // add multiply products to CartId
 cartsRouter.post('/:cid/products/:prodArray'), async (req,res) => {

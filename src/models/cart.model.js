@@ -5,7 +5,7 @@ const cartSchema = new mongoose.Schema({
         {
             product: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
+                ref: "products",
                 required: true
             },
             quantity: {
@@ -24,3 +24,4 @@ cartSchema.pre('findOne', function (next) {
 const CartModel =  mongoose.model("carts", cartSchema); 
 
 export default CartModel;
+
