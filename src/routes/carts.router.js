@@ -34,7 +34,7 @@ cartsRouter.post('/:cid/product/:pid', async (req,res)  => {
         const pid = req.params.pid
         const quantity = req.body.quantity || 1
         const cart = await cartManager.addProductToCart(cid,pid,quantity)
-        res.status(201).json({message: `Product added successfully.  ${error.message}`});
+        res.status(201).json({message: `Product added successfully.}`});
     } catch (error) {
         res.status(500).json({ error: `Internal Server Error - adding product to Cart.  ${error.message}`})
     }
@@ -54,10 +54,10 @@ cartsRouter.post('/:cid/products/:prodArray'), async (req,res) => {
 } */
 
 // empty specified cart
-cartsRouter.delete('/:cid', async (req,resp) => {
+cartsRouter.delete('/:cid', async (req,res) => {
     const {cid} = req.params
     try {
-        const response = await cartManager.emptyCart(id)
+        const response = await cartManager.emptyCart(cid)
         res.status(200).json({message: "Cart successfully deleted"});
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error - deleting Cart"})
@@ -66,7 +66,7 @@ cartsRouter.delete('/:cid', async (req,resp) => {
 
 // Middleware for not defined routes
 cartsRouter.use((req, res) => {
-    res.status(404).json({ error: "Not Found" });
+    res.status(404).json({ error: "Route Not Found" });
 })
 
 
