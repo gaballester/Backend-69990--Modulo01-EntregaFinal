@@ -40,18 +40,17 @@ cartsRouter.post('/:cid/products/:pid', async (req,res)  => {
     }
 })
 
-
-
-/* // add multiply products to CartId
-cartsRouter.post('/:cid/products/:prodArray'), async (req,res) => {
-    const {cid, prodArray} = req.params
+// add multiply products to CartId
+cartsRouter.put('/:cid'), async (req,res) => {
+    const cid = req.params.cid
+    const prodArray = req.body.products
     try {
         const cart = await addProductsToCart(cid, prodArray)
         res.status(201).json({message: "Products added successfully"})
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error - adding array products to Cart"})
     }
-} */
+} 
 
 // empty specified cart
 cartsRouter.delete('/:cid', async (req,res) => {

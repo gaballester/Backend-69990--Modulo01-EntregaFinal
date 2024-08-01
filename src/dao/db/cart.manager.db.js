@@ -59,6 +59,21 @@ class CartManager {
             throw new Error(`Error updating cart: ${error.message}`)   
         }
     }
+
+    // add multiple products to cart
+    addProductsToCart = async (cartId, products) => {
+        try {
+            const cart = await CartModel.findById(cartId)   
+            if (!cart) {
+                return res.status(404).json({ success: false, message: `Cannot exist cart with Id ${cartId}`})
+            }
+            cart.products = products      
+            await cart.save()
+            return cart
+        } catch (error) {
+            throw new Error(`Error updating cart: ${error.message}`)   
+        }
+    }
  
      emptyCart = async (cid) => {
         try {
@@ -79,6 +94,7 @@ class CartManager {
 
     dropProductFromCart = async (cartId, productId) => {
         try {
+
             const cart = await CartModel.findById(cartId);
     
             if (!cart) {
