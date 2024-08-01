@@ -1,5 +1,7 @@
 import CartModel from '../../models/cart.model.js'
 import ProductModel from '../../models/product.model.js';
+import mongoose from 'mongoose'
+
 
 class CartManager {
 
@@ -73,18 +75,33 @@ class CartManager {
         } catch (error) {
             return { success: false, message: `drop products error,  ${error.message}` };
         }
-
-
-        try {
-            // drop all documents for specific cart
-            await CartModel.deleteMany(cid);
-            return `Cart with id ${cid} has been successfully empty.`
-        } catch (error) {
-            throw `Error while tey to empty Cart: ${error.message}`
-        }
     }
 
+    dropProductFromCart = async (cartId, productId) => {
+        try {
+            const cart = await CartModel.findById(cartId);
+    
+            if (!cart) {
+                throw new Error(`Cart with id ${cartId} not found`);
+            }
+    
+            const existingProductIndex = cart.products.findIndex(product => product.product.equals(productId))  
+    
+            if (existingProductIndex === -1) {
+                return { success: false, message: 'Product does not exist in the cart' }
+            }
+    
+            cart.products.splice(existingProductIndex, 1);
+
+            await cart.save();
+            return { success: true, message: 'Product removed from cart successfully' }
+
+        } catch (error) {
+            throw new Error(`Error dropping product from cart: ${error.message}`)
+        }
+    }
+    
 }
 
-  export { CartManager }
+export { CartManager }
   
