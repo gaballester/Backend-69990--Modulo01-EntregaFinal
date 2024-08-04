@@ -121,9 +121,9 @@ Additionally, if an existing product tries to be added to the product, increment
 
 | Parameter | Type     | Description                                 |Body |
 | :-------- | :------- | :------------------------------------------ ||
-|  cid    | integer  | id of cart to update the product            ||
-|  pid    | integer  | id of product to add in cart          ||
-| quantity |||{  "quantity": 33 } |
+|  `cid`    | `integer`  | id of cart to update the product            ||
+|  `pid`    | `integer`  | id of product to add in cart          ||
+| `quantity` |||{  "quantity": 33 } |
 
 Example of cart updated 
 
