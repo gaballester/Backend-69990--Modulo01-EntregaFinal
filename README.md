@@ -123,7 +123,7 @@ Additionally, if an existing product tries to be added to the product, increment
 | :-------- | :------- | :------------------------------------------ ||
 |  `cid`    | `integer`  | id of cart to update the product            ||
 |  `pid`    | `integer`  | id of product to add in cart          ||
-| `quantity` |||{  "quantity": 33 } |
+| `quantity` |`object`|  |{  "quantity": 33 } |
 
 Example of cart updated 
 
