@@ -24,6 +24,7 @@ Returns the values ​​of the product whose id matches with the id passed as a
 ```http
   GET /api/products/${id}
 ```
+
 | Parameter | Type     | Description                          |
 | :-------- | :------- | :----------------------------------- |
 | `id`      | `number` | **Required**. Id of product to fetch |
@@ -116,8 +117,11 @@ This route adds the product to the “products” array of the chosen cart, addi
 
 - product: SHOULD ONLY CONTAIN THE PRODUCT ID (It is crucial that you do not add the entire product)
 - quantity: must contain the number of copies of said product. The product quantity parameter have a 1 value for default, if this is omit in the call
+
+Additionally, if an existing product tries to be added to the product, increment the quantity field of said product.
+
 | Parameter | Type     | Description                                 |Body |
-| :-------- | :------- | :------------------------------------------ ||
+| :-------- | :------- | :------------------------------------------ |:------|
 |  `cid`    | `integer`  | id of cart to update the product            ||
 |  `pid`    | `integer`  | id of product to add in cart          ||
 | `quantity` |`object`|  |{  "quantity": 33 } |
