@@ -115,29 +115,19 @@ Example of initial cart created
 This route adds the product to the “products” array of the chosen cart, adding it as an object in the following format:
 
 - product: SHOULD ONLY CONTAIN THE PRODUCT ID (It is crucial that you do not add the entire product)
-- quantity: must contain the number of copies of said product. The product, will be added one at a time.
+- quantity: must contain the number of copies of said product. The product quantity parameter have a 1 value for default, if this is omit in the call
 
 Additionally, if an existing product tries to be added to the product, increment the quantity field of said product.
-| Parameter | Type     | Description                                 |
-| :-------- | :------- | :------------------------------------------ |
-|  cid    | integer  | id of cart to update the product            |
-|  pid    | integer  | id of product to add in cart          |
+
+| Parameter | Type     | Description                                 |Body |
+| :-------- | :------- | :------------------------------------------ ||
+|  cid    | integer  | id of cart to update the product            ||
+|  pid    | integer  | id of product to add in cart          ||
+| quantity |||{  "quantity": 33 } |
 
 Example of cart updated 
 
-        {
-            "id": 1,
-            "products": [
-                {
-                    "productId": 2,
-                    "quantity": 1
-                },
-                {
-                    "productId": 3,
-                    "quantity": 3
-                }
-            ]
-        }
+![Logo](./imagesMD/ec.carts.jpg)
 
 ### Get a particular Cart
 Returns the list of products that belong to the cart with the id parameter provided.
@@ -149,6 +139,45 @@ Returns the list of products that belong to the cart with the id parameter provi
 | `id`      | `number` | **Required**. Id of cart to fetch |
 
 ---
+### Delete Product from specified Cart
+This metod permit drop a specified product from one cart.
+
+```http
+  DELETE /api/carts/:cid/products/:pid
+```
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| cid     | `number` | **Required**. Id of cart to fetch |
+| pid     | `number` | **Required**. Id of product to delete |
+
+
+### update all Products from specified Cart
+This metod permit update the products array completed. replace the content of products array in the cart record
+
+```http
+  PUT /api/carts/:cid
+```
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| cid     | `number` | **Required**. Id of cart to UPDATE |
+
+In the body pass the products arrays , example
+```http
+[
+  { 
+    "product": "6689c6b04dd240c27637bfe0",
+    "quantity": 1
+  },
+  { 
+    "product": "6689c6b04dd240c27637bfe1",
+    "quantity": 2
+  },
+  { 
+    "product": "6689c6b04dd240c27637bfe5",
+    "quantity": 3
+  }
+]
+```
 
 ![Logo](./imagesMD/socket-io-handlebars.jpg)
 
@@ -186,3 +215,5 @@ Shows all products available in the ecommerce site, and allows registration of n
 
 
 ![Logo](./imagesMD/realtimeproducts.jpg)
+
+###End
