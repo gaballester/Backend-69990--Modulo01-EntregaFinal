@@ -34,23 +34,23 @@ cartsRouter.post('/:cid/products/:pid', async (req,res)  => {
         const pid = req.params.pid
         const quantity = req.body.quantity || 1
         const cart = await cartManager.addProductToCart(cid,pid,quantity)
-        res.status(201).json({message: `Product added successfully.}`});
+        return cart
     } catch (error) {
         res.status(500).json({ error: `Internal Server Error - adding product to Cart.  ${error.message}`})
     }
 })
 
-// add multiply products to CartId
-cartsRouter.put('/:cid'), async (req,res) => {
-    const cid = req.params.cid
-    const prodArray = req.body.products
+// replace products with multiply products to CartId
+cartsRouter.put('/:cid', async (req, res) => {
+    const { cid } = req.params
+    const products = req.body 
     try {
-        const cart = await addProductsToCart(cid, prodArray)
-        res.status(201).json({message: "Products added successfully"})
+        const updatedCart = await cartManager.addProductsToCart(cid, products);
+        res.status(200).json({ message: "Products added successfully", cart: updatedCart })
     } catch (error) {
-        res.status(500).json({ error: "Internal Server Error - adding array products to Cart"})
+        res.status(500).json({ error: `Internal Server Error - ${error.message}` })
     }
-} 
+})
 
 // empty specified cart
 cartsRouter.delete('/:cid', async (req,res) => {

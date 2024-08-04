@@ -1,7 +1,4 @@
 import CartModel from '../../models/cart.model.js'
-import ProductModel from '../../models/product.model.js';
-import mongoose from 'mongoose'
-
 
 class CartManager {
 
@@ -63,15 +60,21 @@ class CartManager {
     // add multiple products to cart
     addProductsToCart = async (cartId, products) => {
         try {
-            const cart = await CartModel.findById(cartId)   
+            const cart = await CartModel.findById(cartId)
             if (!cart) {
-                return res.status(404).json({ success: false, message: `Cannot exist cart with Id ${cartId}`})
+                throw new Error(`Cannot find cart with Id ${cartId}`)
             }
-            cart.products = products      
-            await cart.save()
-            return cart
+            
+            // Iterate over the products and add each one using addProductToCart
+            for (const { product, quantity } of products) {
+                await this.addProductToCart(cartId, product, quantity)
+            }
+            
+            // Fetch the updated cart and return it
+            const updatedCart = await CartModel.findById(cartId).populate('products.product')
+            return updatedCart;
         } catch (error) {
-            throw new Error(`Error updating cart: ${error.message}`)   
+            throw new Error(`Error updating cart: ${error.message}`)
         }
     }
  
@@ -80,15 +83,15 @@ class CartManager {
             // find cart by id
             const cart = await CartModel.findById(cid);           
             if (!cart) {
-                return { success: false, message: 'Cart is not found' };
+                return { status: error, message: 'Cart is not found' };
             }
             // empty products array
             cart.products = [];    
             // save db changes
             await cart.save();   
-            return { success: true, message: 'products droped successfull' };
+            return { status: success, message: 'products droped successfull' };
         } catch (error) {
-            return { success: false, message: `drop products error,  ${error.message}` };
+            return { status: error, message: `drop products error,  ${error.message}` };
         }
     }
 
